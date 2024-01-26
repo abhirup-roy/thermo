@@ -10,7 +10,7 @@ w = 0.2249
 R = 8.314  # kJ/kmol K
 
 # # Temperature and Volume ranges
-T = [T_C-30,T_C-20,T_C-10,T_C, T_C+10, T_C+20, T_C+20]  # K
+T = [T_C-60,T_C-40,T_C-20,T_C, T_C+20, T_C+40, T_C+60]  # K
 V = np.linspace(0.45e-4, 3e-4, 10000)
 
 
@@ -23,7 +23,6 @@ for temp in T:
     # Calculate alpha and pressure for given temp
     T_R = temp / T_C
     alpha = (1 + (0.37464 + 1.54226 * w - 0.26992 * w ** 2) * (1 - T_R ** 0.5)) ** 2
-
     P = (R * temp / (V - b)) - ((a * alpha) / (V ** 2 + 2 * b * V - b ** 2))
     # Plot P-V diagram
     if T == T_C:
@@ -47,7 +46,7 @@ v_f = v_f[v_f["vf (cm3/mol)"]>=45]
 v_g = df_sat.drop(["vf (cm3/mol)", "T (K)"], axis=1)
 v_g = v_g[v_g["vg (cm3/mol)"]<=300]
 
-plt.plot(v_f["vf (cm3/mol)"], v_f["P (MPa)"], linestyle = '--', color="black")
+plt.plot(v_f["vf (cm3/mol)"], v_f["P (MPa)"], linestyle = '--', color="black", label="Saturation Plot")
 plt.plot(v_g["vg (cm3/mol)"], v_g["P (MPa)"], linestyle = '--', color="black")
 
 Vc = 91.9 #cm3/mol
@@ -57,11 +56,11 @@ plt.plot(Vc,P_C*1e-6, marker="x", color="black", label="Critical Point")
 # Plot critical temp
 # plt.axhline(y=P_C, linestyle = 'dashed', color="k", label = "Critical Pressure")
 ax = plt.gca()
-ax.set_ylim(top=35)
+ax.set_ylim(top=35, bottom=0)
 
 plt.xlabel('Specific Volume ($cm^3$/mol)')
 plt.ylabel('Pressure (MPa)')
-plt.legend()
+plt.legend(loc="upper right")
 plt.title('P-V Diagram - $CO_2$ (Peng-Robinson Equation of State)')
 plt.grid(True)
-plt.show()
+plt.show()  
